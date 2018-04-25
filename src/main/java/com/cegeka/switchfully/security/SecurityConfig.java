@@ -19,6 +19,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers(ArmyResource.ARMY_RESOURCE_PATH + "/discharge/**").hasRole("HUMAN_RELATIONSHIPS")
+                .antMatchers(ArmyResource.ARMY_RESOURCE_PATH + "/nuke/**").hasRole("GENERAL")
+                .antMatchers(ArmyResource.ARMY_RESOURCE_PATH).hasRole("CIVILIAN")
+                .antMatchers(ArmyResource.ARMY_RESOURCE_PATH+"/*").hasAnyRole("GENERAL","PRIVATE")
+                .antMatchers(ArmyResource.ARMY_RESOURCE_PATH + "/promote/**").hasRole("HUMAN_RELATIONSHIPS")
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()
